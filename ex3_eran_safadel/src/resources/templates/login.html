@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Ex3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+          integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/shards.min.css">
+</head>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById("btnSubmit").addEventListener("click", listenerButtonSubmit);
+        document.getElementById("name").addEventListener("click", clearErrMsg);
+        document.getElementById("password").addEventListener("click", clearErrMsg);
+    });
+
+    function listenerButtonSubmit() {
+
+
+        const name = document.getElementById("name").value;
+        const pass = document.getElementById("password").value;
+
+        //const JsonLogin = {nameLogin: nameInput, passwordLogin: passInput};
+        fetch("/actionlogin", {
+            method: 'POST',
+            headers: new Headers({'Content-Type': 'application/json'}),
+            body: JSON.stringify({name: name, password: pass})
+        })
+            // .then(res => res.json()
+            .then(response => response.json())
+            .then(res => {
+
+
+                if (res.success)
+                    window.location.href = "/ResultsGithub";
+                else {
+                    document.getElementById("msg").innerText = " Wrong credentials"
+                }
+
+            })
+            .catch(error => {
+
+            });
+
+
+        //window.location.replace("/homePage")  ;
+        //response.redirect("/homePage");
+
+    }
+
+    function clearErrMsg() {
+        document.getElementById("msg").innerText = "";
+        document.getElementById("name").innerText = "";
+        document.getElementById("password").innerHTML = "";
+    }
+
+
+</script>
+
+
+<body >
+
+<div  class="container "  >
+    <h6 class="text-center">Ex3 -Eran Safadel </h6>
+    <div class="row">
+        <div class="col-md-12">
+            <h5 class="text-center" th:text="${msgError}">msg</h5>
+        </div>
+        <div class="col-md-12">
+            <h5 class="text-center" id="msg"></h5>
+        </div>
+    </div>
+
+
+<div class="container">
+    <div class="row mgTp">
+        <div class="col-md-6 offset-md-3">
+
+            <hr class="divisor">
+            <div class="form-group">
+                <label for="name">Username</label>
+                <input type="email" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Enter name">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+            </div>
+
+            <button id="btnSubmit" class="btn btn-primary">Login</button>
+        </div>
+    </div>
+
+
+
+</div>
+</div>
+
+
+</body>
+</html>
